@@ -1,0 +1,47 @@
+# Django and REST Framework
+Django~=5.2
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.5.0
+django-cors-headers==4.7.0
+django-filter==25.1
+
+# Async Support
+channels~=4.2.2
+channels-redis==4.2.1
+daphne==4.1.2
+uvicorn[standard]==0.34.2
+
+# Database
+tortoise-orm==0.25.0
+asyncpg==0.30.0
+aerich==0.8.2 # Tortoise ORM migrations
+
+# GraphQL
+graphene-django==3.2.3
+django-graphql-jwt==0.3.4
+
+# Authentication and Security
+passlib==1.7.4
+bcrypt==4.2.1
+
+# Utilities
+Pillow==11.2.1
+qrcode==8.1
+python-dotenv==1.1.0
+pydantic==2.11.4
+httpx==0.28.1
+whitenoise==6.8.2
+
+# Testing
+pytest==8.3.5
+pytest-django==4.11.1
+pytest-asyncio==0.25.3
+
+# Development Tools
+black==25.1.0
+isort==6.0.1
+flake8==7.1.2
+
+# Production
+gunicorn==23.0.0
+psycopg2-binary==2.9.10  # For PostgreSQL connection
