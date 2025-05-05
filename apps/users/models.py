@@ -3,6 +3,14 @@ import uuid
 from tortoise import fields
 from tortoise.models import Model
 
+from enum import Enum
+
+class AuthProvider(str, Enum):
+    PHONE = "phone"
+    GOOGLE = "google"
+    FACEBOOK = "facebook"
+    APPLE = "apple"
+
 
 class User(Model):
     id = fields.UUIDField(pk=True, default=uuid.uuid4)
@@ -33,3 +41,17 @@ class Authentication(Model):
     class Meta:
         table = "authentication"
         unique_together = [("user_id", "auth_provider")]
+
+
+class OTPVerification(Model):
+    """Model for storing OTP verification requests"""
+    id = fields.UUIDField(pk=True, default=uuid.uuid4)
+    phone_number = fields.CharField(max_length=20, index=True)
+    otp_code = fields.CharField(max_length=6)
+    is_verified = fields.BooleanField(default=False)
+    verification_attempts = fields.IntField(default=0)
+    expires_at = fields.DatetimeField()
+    created_at = fields.DatetimeField(auto_now_add=True)
+
+    class Meta:
+        table = "otp_verifications"

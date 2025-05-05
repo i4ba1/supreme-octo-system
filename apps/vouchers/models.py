@@ -1,7 +1,7 @@
+import uuid
+
 from tortoise import fields
 from tortoise.models import Model
-import uuid
-from datetime import date
 
 
 class Voucher(Model):

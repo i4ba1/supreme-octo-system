@@ -27,3 +27,18 @@ class AuthenticationSerializer(TortoiseSerializer):
     async def to_representation(self, instance):
         pydantic_model = await self.get_pydantic_model(instance)
         return pydantic_model.dict(exclude={'auth_token'})
+
+
+class PhoneLoginSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=20)
+
+
+class OTPVerificationSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=20)
+    otp_code = serializers.CharField(max_length=6)
+
+
+class SocialLoginSerializer(serializers.Serializer):
+    provider = serializers.ChoiceField(choices=['google', 'facebook', 'apple'])
+    token = serializers.CharField()
+    phone_number = serializers.CharField(max_length=20, required=False, allow_null=True)

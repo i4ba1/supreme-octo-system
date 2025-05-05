@@ -1,4 +1,5 @@
 import uuid
+import redis
 from typing import Optional, Dict, Any
 
 from passlib.hash import bcrypt
@@ -8,6 +9,48 @@ from apps.users.models import User
 
 
 class UserService:
+
+    @staticmethod
+    async def check_phone_exists(phone_number: str) -> bool:
+        """
+        Check if a phone number already exists, using Redis cache first.
+
+        Args:
+            phone_number: The phone number to check
+
+        Returns:
+            True if the phone number exists, False otherwise
+        """
+        # Get Redis connection
+        redis = await UserService.get_redis()
+
+        # Try to get from cache first
+        cache_key = f"phone:{phone_number}"
+        exists_in_cache = await redis.get(cache_key)
+
+        if exists_in_cache is not None:
+            # Return cached result (convert bytes to bool)
+            return exists_in_cache == b'1'
+
+        # Not in cache, check database
+        user_exists = await User.filter(phone_number=phone_number).exists()
+
+        # Cache the result with expiration of 1 hour (3600 seconds)
+        await redis.set(cache_key, '1' if user_exists else '0', expire=3600)
+
+        return user_exists
+
+    @staticmethod
+    async def invalidate_phone_cache(phone_number: str) -> None:
+        """
+        Invalidate phone number cache when a user is created or phone is updated.
+
+        Args:
+            phone_number: Phone number to invalidate in cache
+        """
+        redis = await UserService.get_redis()
+        await redis.delete(f"phone:{phone_number}")
+
     @staticmethod
     async def get_by_id(user_id: uuid.UUID) -> Optional[User]:
         """Get user by ID."""
