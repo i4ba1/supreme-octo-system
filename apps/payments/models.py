@@ -1,9 +1,13 @@
 import uuid
+from typing import TYPE_CHECKING, TypeVar
 
 from tortoise import fields
 from tortoise.models import Model
 
-from apps.payments.types import PaymentWithRelations
+
+# Use TYPE_CHECKING to avoid runtime imports
+if TYPE_CHECKING:
+    PaymentWithRelations = TypeVar('PaymentWithRelations', bound='Payment')
 
 
 class PaymentMethod(Model):
@@ -45,7 +49,7 @@ class Payment(Model):
 
 class QRCode(Model):
     id = fields.UUIDField(pk=True, default=uuid.uuid4)
-    payment = fields.OneToOneField('Payment', related_name='qr_code')
+    payment = fields.OneToOneField('models.Payment', related_name='qr_code')
     qr_data = fields.TextField()
     qr_image_url = fields.CharField(max_length=255, null=True)
     is_downloaded = fields.BooleanField(default=False)
@@ -60,7 +64,7 @@ class QRCode(Model):
 
 class PaymentVerification(Model):
     id = fields.UUIDField(pk=True, default=uuid.uuid4)
-    payment = fields.OneToOneField('Payment', related_name='verification')
+    payment = fields.OneToOneField('models.Payment', related_name='verification')
     verification_type = fields.CharField(max_length=20)
     verification_status = fields.CharField(max_length=20, default='pending')
     verification_message = fields.TextField(null=True)

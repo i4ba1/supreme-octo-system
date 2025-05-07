@@ -1,6 +1,7 @@
 import os
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
+
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -27,17 +28,17 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
+    'django_celery_beat',
     'graphene_django',
 
     # Project apps
-    'apps.users',
-    'apps.restaurants',
-    'apps.menu',
-    'apps.orders',
-    'apps.payments',
-    'apps.vouchers',
-    'apps.reviews',
-    'graphql_api',
+    'apps.users.apps.UsersConfig',
+    'apps.restaurants.apps.RestaurantsConfig',
+    'apps.menu.apps.MenuConfig',
+    'apps.orders.apps.OrderConfig',
+    'apps.payments.apps.PaymentsConfig',
+    'apps.vouchers.apps.VouchersConfig',
+    'apps.reviews.apps.ReviewsConfig',
 ]
 
 MIDDLEWARE = [
