@@ -18,5 +18,5 @@ urlpatterns = [
     path('api/reviews/', include('apps.reviews.urls')),
 
     # GraphQL endpoint (will implement async version later)
-    path('graphql/', include('graphql_api.urls')),
+    # path('graphql/', include('graphql_api.urls')),
 ]
